@@ -4,11 +4,12 @@ view available tickets, searching by name.
 
 Thank you...
 */
-
+//dont forget to change the file name variable in the export ticket function
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<unistd.h>
 #define MAX_SEAT 40
 
 
@@ -23,6 +24,7 @@ void print_tickets(ticket s[]);
 void book_tickets(ticket b[]);
 void view_avl_tickets(ticket a[]);
 void search_name(ticket s[]);
+void export_ticket(ticket t[]);
 void main_menu(ticket bus_ticket[]){
     int opt;
     printf("\t\t Welcome to Bus ticket booking system \n\n");
@@ -30,6 +32,7 @@ void main_menu(ticket bus_ticket[]){
     printf("2.See all Tickets\n");
     printf("3.view available tickets\n");
     printf("4.Search Name\n");
+    printf("5.Export Data (to txt file)\n");
     printf("Enter any other number to exit\n");
     printf("Choose any options: ");
     scanf("%d",&opt); 
@@ -50,7 +53,9 @@ void main_menu(ticket bus_ticket[]){
     case 4:
         search_name(bus_ticket);
         break;
-    
+    case 5:
+    	export_ticket(bus_ticket);
+    	break;
     default:
         printf("Invalid Option Chosen... Exiting Program");
         break;
@@ -168,4 +173,31 @@ void search_name(ticket b[]){
     if(count == 0) printf("\nSorry No ticket was registered with this name\n");
     printf("press 1 to return to main menu");
     if (getch() == 49) main_menu(b);
+}
+
+void export_ticket(ticket t[]){
+	FILE *fp,*fpc;
+	// file name will be with path 
+	char fname[150] = "ticket.txt"; //in future i will add date feature in the name for multiple dates tickets
+	fclose(fopen(fname,"w")); //delete all file content 
+	fp = fopen(fname,"a+");
+	
+	if (fp == NULL){
+		printf("error opening file please report error to the author");
+	} else{
+		for(int i = 0;i<MAX_SEAT;i++){
+			fprintf(fp,"%d. %s",t[i].no,t[i].name);
+		}
+	}
+	printf("File saved successfully.......");
+	fclose(fp);
+	int qans = 1; //name is as quick answer
+	printf("Press 1 to return to main menu");
+    qans =getch();
+    if (qans== 49) 
+        main_menu(t);
+    else{
+        printf("getch value = %d",qans);
+    }
+	
 }
